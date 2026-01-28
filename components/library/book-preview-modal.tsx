@@ -113,12 +113,12 @@ export function BookPreviewModal({ book, onClose }: BookPreviewModalProps) {
                   <Button className="flex-1 bg-primary text-primary-foreground hover:bg-primary/90">
                     Reserve Now
                   </Button>
-                  <Button
+                  {/* <Button
                     variant="outline"
                     className="flex-1 border-secondary text-secondary hover:bg-secondary hover:text-secondary-foreground bg-transparent"
                   >
                     Read Online
-                  </Button>
+                  </Button> */}
                 </>
               ) : (
                 <>

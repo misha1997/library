@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Star, Eye, BookOpen, Clock, Calendar, FileText } from "lucide-react";
+import { Star, Eye, BookOpen, Clock, Calendar, FileText, Printer } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import type { Book } from "@/lib/books-data";
@@ -30,11 +30,10 @@ export function BookRow({ book, onQuickPreview, onKeywordClick, onCategoryClick 
           <div className="absolute left-1.5 top-1.5">
             <Badge
               variant={book.available ? "default" : "secondary"}
-              className={`text-[10px] ${
-                book.available
+              className={`text-[10px] ${book.available
                   ? "bg-secondary text-secondary-foreground"
                   : "bg-amber-500/90 text-white"
-              }`}
+                }`}
             >
               {book.available ? "Available" : "Reserved"}
             </Badge>
@@ -127,17 +126,14 @@ export function BookRow({ book, onQuickPreview, onKeywordClick, onCategoryClick 
             <Eye className="h-3.5 w-3.5" />
             Preview
           </Button>
-          {book.available ? (
-            <Button size="sm" className="gap-1.5 bg-secondary text-xs text-secondary-foreground hover:bg-secondary/90">
-              <BookOpen className="h-3.5 w-3.5" />
-              Read Online
-            </Button>
-          ) : (
-            <Button size="sm" variant="outline" className="gap-1.5 text-xs bg-transparent">
-              <Clock className="h-3.5 w-3.5" />
-              Reserve
-            </Button>
-          )}
+          <Button size="sm" variant="outline" className="gap-1.5 text-xs bg-transparent">
+            <Clock className="h-3.5 w-3.5" />
+            Reserve
+          </Button>
+          <Button size="sm" variant="outline" className="gap-1.5 text-xs bg-transparent">
+            <Printer className="h-3.5 w-3.5" />
+            Print
+          </Button>
         </div>
       </div>
     </div>

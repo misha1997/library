@@ -74,12 +74,12 @@ export function HeroSearch({ onSearch }: HeroSearchProps) {
         {/* Hero Text */}
         <div className="mb-10 text-center">
           <h1 className="font-serif text-4xl font-bold tracking-tight text-primary-foreground md:text-5xl lg:text-6xl">
-            <span className="text-balance">Discover Your Next</span>
+            <span className="text-balance">Центральна міська бібліотека</span>
             <br />
-            <span className="text-secondary">Great Read</span>
+            <span className="text-secondary">імені Т. Г. Шевченка</span>
           </h1>
           <p className="mx-auto mt-4 max-w-2xl text-pretty text-lg text-primary-foreground/70">
-            Explore thousands of books across every genre. From timeless classics to contemporary bestsellers.
+            Центральна бібліотека ім.Т.Шевченка обслуговує різні категорії користувачів. Надає інформаційні, просвітницькі, дозвіллєві послуги.
           </p>
         </div>
 
@@ -92,7 +92,7 @@ export function HeroSearch({ onSearch }: HeroSearchProps) {
                 <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-primary-foreground/60" />
                 <Input
                   type="text"
-                  placeholder="Search by title, author, or ISBN..."
+                  placeholder="Пошук по назві, автору, або ISBN..."
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                   onKeyDown={handleKeyDown}
@@ -113,7 +113,7 @@ export function HeroSearch({ onSearch }: HeroSearchProps) {
                 onClick={handleSearch}
                 className="h-12 rounded-xl bg-secondary px-6 text-secondary-foreground hover:bg-secondary/90"
               >
-                Search
+                Пошук
               </Button>
             </div>
           </div>
@@ -192,7 +192,7 @@ export function HeroSearch({ onSearch }: HeroSearchProps) {
 
         {/* Quick Tags */}
         <div className="mt-6 flex flex-wrap items-center justify-center gap-2">
-          <span className="text-sm text-primary-foreground/60">Popular:</span>
+          <span className="text-sm text-primary-foreground/60">Популярні запити:</span>
           {["Fiction", "Thriller", "Self-Help", "Science Fiction"].map((tag) => (
             <button
               key={tag}

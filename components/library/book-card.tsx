@@ -114,13 +114,13 @@ export function BookCard({ book, onQuickPreview }: BookCardProps) {
               >
                 Reserve
               </Button>
-              <Button
+              {/* <Button
                 size="sm"
                 variant="outline"
                 className="flex-1 border-secondary text-secondary hover:bg-secondary hover:text-secondary-foreground bg-transparent"
               >
                 Read Online
-              </Button>
+              </Button> */}
             </>
           ) : (
             <Button

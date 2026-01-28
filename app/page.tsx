@@ -20,7 +20,7 @@ export default function LibraryPage() {
   });
   const [selectedGenre, setSelectedGenre] = useState("All Genres");
   const [previewBook, setPreviewBook] = useState<Book | null>(null);
-  const [viewMode, setViewMode] = useState<ViewMode>("grid");
+  const [viewMode, setViewMode] = useState<ViewMode>("list");
   const [selectedArrivalMonth, setSelectedArrivalMonth] = useState<{ month: number; year: number } | null>(null);
 
   // Filter books based on search and filters

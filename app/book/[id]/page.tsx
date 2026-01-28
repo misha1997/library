@@ -88,10 +88,10 @@ export default async function BookPage({
               <div className="mt-6 space-y-3">
                 {book.available ? (
                   <>
-                    <Button className="w-full gap-2 bg-primary py-6 text-lg text-primary-foreground hover:bg-primary/90">
+                    {/* <Button className="w-full gap-2 bg-primary py-6 text-lg text-primary-foreground hover:bg-primary/90">
                       <BookOpen className="h-5 w-5" />
                       Read Online
-                    </Button>
+                    </Button> */}
                     <Button
                       variant="outline"
                       className="w-full gap-2 border-secondary bg-transparent py-6 text-lg text-secondary hover:bg-secondary hover:text-secondary-foreground"
