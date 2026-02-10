@@ -8,13 +8,13 @@ interface NewArrivalsCalendarProps {
 }
 
 const MONTHS = [
-  "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+  "Січ", "Лют", "Бер", "Кві", "Тра", "Чер",
+  "Лип", "Сер", "Вер", "Жов", "Лис", "Гру"
 ];
 
 const FULL_MONTHS = [
-  "January", "February", "March", "April", "May", "June",
-  "July", "August", "September", "October", "November", "December"
+  "Січень", "Лютий", "Березень", "Квітень", "Травень", "Червень",
+  "Липень", "Серпень", "Вересень", "Жовтень", "Листопад", "Грудень"
 ];
 
 // Sample data for new arrivals count per month
@@ -60,7 +60,7 @@ export function NewArrivalsCalendar({ onMonthSelect }: NewArrivalsCalendarProps)
       {/* Header */}
       <div className="mb-4 flex items-center gap-2">
         <CalendarDays className="h-5 w-5 text-secondary" />
-        <h3 className="font-serif text-lg font-semibold text-card-foreground">New Arrivals</h3>
+        <h3 className="font-serif text-lg font-semibold text-card-foreground">Нові надходження</h3>
       </div>
 
       {/* Year Selector */}
@@ -69,7 +69,7 @@ export function NewArrivalsCalendar({ onMonthSelect }: NewArrivalsCalendarProps)
           type="button"
           onClick={handlePrevYear}
           className="flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-background hover:text-foreground"
-          aria-label="Previous year"
+          aria-label="Попередній рік"
         >
           <ChevronLeft className="h-4 w-4" />
         </button>
@@ -81,7 +81,7 @@ export function NewArrivalsCalendar({ onMonthSelect }: NewArrivalsCalendarProps)
           onClick={handleNextYear}
           disabled={selectedYear >= currentDate.getFullYear()}
           className="flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-background hover:text-foreground disabled:cursor-not-allowed disabled:opacity-30"
-          aria-label="Next year"
+          aria-label="Наступний рік"
         >
           <ChevronRight className="h-4 w-4" />
         </button>
@@ -101,26 +101,24 @@ export function NewArrivalsCalendar({ onMonthSelect }: NewArrivalsCalendarProps)
               type="button"
               onClick={() => !isFuture && handleMonthClick(index)}
               disabled={isFuture}
-              className={`group relative flex flex-col items-center justify-center rounded-xl px-2 py-3 text-center transition-all ${
-                isFuture
+              className={`group relative flex flex-col items-center justify-center rounded-xl px-2 py-3 text-center transition-all ${isFuture
                   ? "cursor-not-allowed opacity-40"
                   : isSelected
                     ? "bg-secondary text-secondary-foreground shadow-md"
                     : isCurrent
                       ? "bg-primary/10 text-primary ring-1 ring-primary/30"
                       : "bg-muted/30 text-card-foreground hover:bg-muted hover:shadow-sm"
-              }`}
+                }`}
             >
               <span className={`text-sm font-medium ${isSelected ? "text-secondary-foreground" : ""}`}>
                 {month}
               </span>
               {!isFuture && (
-                <span className={`mt-0.5 text-xs ${
-                  isSelected 
-                    ? "text-secondary-foreground/80" 
+                <span className={`mt-0.5 text-xs ${isSelected
+                    ? "text-secondary-foreground/80"
                     : "text-muted-foreground"
-                }`}>
-                  {arrivalsCount} new
+                  }`}>
+                  {arrivalsCount} нових
                 </span>
               )}
               {isCurrent && !isSelected && (
@@ -144,7 +142,7 @@ export function NewArrivalsCalendar({ onMonthSelect }: NewArrivalsCalendarProps)
             </span>
           </div>
           <p className="mt-1 text-xs text-muted-foreground">
-            {getArrivalsCount(selectedMonth, selectedYear)} books added this month
+            {getArrivalsCount(selectedMonth, selectedYear)} книги, додано цього місяця
           </p>
         </div>
       )}

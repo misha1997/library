@@ -1,6 +1,9 @@
+"use client";
+
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { useParams, notFound } from "next/navigation";
 import {
   ArrowLeft,
   Star,
@@ -17,6 +20,7 @@ import { Progress } from "@/components/ui/progress";
 import { books, type Book } from "@/lib/books-data";
 import { BookActions } from "./book-actions";
 import { BookComments } from "./book-comments";
+import { BookOrderModal } from "./book-order-modal";
 
 function getBook(id: string): Book | undefined {
   return books.find((book) => book.id === id);
@@ -28,12 +32,11 @@ function getSimilarBooks(book: Book): Book[] {
     .slice(0, 4);
 }
 
-export default async function BookPage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
-  const { id } = await params;
+export default function BookPage() {
+  const params = useParams();
+  const id = params.id as string;
+  const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
+  
   const book = getBook(id);
 
   if (!book) {
@@ -62,7 +65,7 @@ export default async function BookPage({
             className="flex items-center gap-2 text-muted-foreground transition-colors hover:text-foreground"
           >
             <ArrowLeft className="h-5 w-5" />
-            <span className="font-medium">Back to Library</span>
+            <span className="font-medium">Назад</span>
           </Link>
           <BookActions />
         </div>
@@ -95,9 +98,10 @@ export default async function BookPage({
                     <Button
                       variant="outline"
                       className="w-full gap-2 border-secondary bg-transparent py-6 text-lg text-secondary hover:bg-secondary hover:text-secondary-foreground"
+                      onClick={() => setIsOrderModalOpen(true)}
                     >
                       <Clock className="h-5 w-5" />
-                      Reserve for Pickup
+                      Замовити
                     </Button>
                   </>
                 ) : (
@@ -114,12 +118,12 @@ export default async function BookPage({
               {/* Availability Card */}
               <div className="mt-6 rounded-xl border border-border/50 bg-card/80 p-4 backdrop-blur-sm">
                 <h3 className="mb-3 font-semibold text-card-foreground">
-                  Availability
+                  Наявність
                 </h3>
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
                     <span className="text-sm text-muted-foreground">
-                      Physical Copies
+                      Фізичних копій
                     </span>
                     <Badge
                       variant={book.available ? "default" : "secondary"}
@@ -130,24 +134,15 @@ export default async function BookPage({
                       }
                     >
                       {book.available
-                        ? `${bookDetails.copies} available`
-                        : "None available"}
+                        ? `${bookDetails.copies} доступно`
+                        : "Немає доступних"}
                     </Badge>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-muted-foreground">eBook</span>
+                    <span className="text-sm text-muted-foreground">Електронне посилання</span>
                     <Badge className="bg-secondary text-secondary-foreground">
                       <Check className="mr-1 h-3 w-3" />
-                      Available
-                    </Badge>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-muted-foreground">
-                      Audiobook
-                    </span>
-                    <Badge className="bg-secondary text-secondary-foreground">
-                      <Check className="mr-1 h-3 w-3" />
-                      Available
+                      Доступно
                     </Badge>
                   </div>
                 </div>
@@ -166,7 +161,6 @@ export default async function BookPage({
             </h1>
             <p className="mt-3 flex items-center gap-2 text-xl text-muted-foreground">
               <User className="h-5 w-5" />
-              by{" "}
               <span className="font-medium text-foreground">{book.author}</span>
             </p>
 
@@ -178,7 +172,7 @@ export default async function BookPage({
                   {book.rating}
                 </span>
                 <span className="text-sm text-amber-600">
-                  ({book.reviews.toLocaleString()} reviews)
+                  ({book.reviews.toLocaleString()} відгуків)
                 </span>
               </div>
               <div className="flex items-center gap-4 text-muted-foreground">
@@ -188,7 +182,7 @@ export default async function BookPage({
                 </span>
                 <span className="flex items-center gap-1">
                   <BookOpen className="h-4 w-4" />
-                  {book.pages} pages
+                  {book.pages} сторінок
                 </span>
               </div>
             </div>
@@ -196,7 +190,7 @@ export default async function BookPage({
             {/* Synopsis */}
             <div className="mt-8">
               <h2 className="font-serif text-2xl font-semibold text-foreground">
-                Synopsis
+                Аннотація
               </h2>
               <div className="mt-4 space-y-4 leading-relaxed text-muted-foreground">
                 {bookDetails.synopsis.split("\n\n").map((paragraph, i) => (
@@ -208,16 +202,16 @@ export default async function BookPage({
             {/* Book Information */}
             <div className="mt-8">
               <h2 className="font-serif text-2xl font-semibold text-foreground">
-                Book Information
+                Інформація про книгу
               </h2>
               <dl className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-3">
                 {[
                   { label: "ISBN", value: bookDetails.isbn },
-                  { label: "Publisher", value: bookDetails.publisher },
-                  { label: "Language", value: bookDetails.language },
-                  { label: "Year", value: book.year.toString() },
-                  { label: "Pages", value: book.pages.toString() },
-                  { label: "Format", value: bookDetails.format },
+                  { label: "Видання", value: bookDetails.publisher },
+                  { label: "Мова", value: bookDetails.language },
+                  { label: "Рік", value: book.year.toString() },
+                  { label: "Сторінок", value: book.pages.toString() },
+                  { label: "Формат", value: bookDetails.format },
                 ].map((item) => (
                   <div
                     key={item.label}
@@ -273,6 +267,13 @@ export default async function BookPage({
           </div>
         </div>
       </main>
+
+      {/* Order Modal */}
+      <BookOrderModal
+        isOpen={isOrderModalOpen}
+        onClose={() => setIsOrderModalOpen(false)}
+        bookTitle={book.title}
+      />
     </div>
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Header } from "@/components/library/header";
 import { HeroSearch, type SearchFilters } from "@/components/library/hero-search";
 import { Sidebar } from "@/components/library/sidebar";
@@ -8,17 +8,31 @@ import { BookGrid, type ViewMode } from "@/components/library/book-grid";
 import { BookPreviewModal } from "@/components/library/book-preview-modal";
 import { books, type Book, genres } from "@/lib/books-data";
 import { useSearchParams } from "next/navigation";
-import { Suspense } from "react";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationPrevious,
+  PaginationNext,
+  PaginationEllipsis,
+} from "@/components/ui/pagination";
 
 export default function LibraryPage() {
   const searchParams = useSearchParams();
   const [searchQuery, setSearchQuery] = useState("");
   const [filters, setFilters] = useState<SearchFilters>({
-    genre: "All Genres",
-    year: "All Years",
+    genre: [],
+    yearRange: [1900, 2026],
     author: "",
+    language: [],
+    availability: "all",
+    rating: 0,
+    publisher: "Всі видавництва",
+    format: [],
+    sortBy: "relevance",
   });
-  const [selectedGenre, setSelectedGenre] = useState("All Genres");
+  const [selectedGenre, setSelectedGenre] = useState("Усі жанри");
   const [previewBook, setPreviewBook] = useState<Book | null>(null);
   const [viewMode, setViewMode] = useState<ViewMode>("list");
   const [selectedArrivalMonth, setSelectedArrivalMonth] = useState<{ month: number; year: number } | null>(null);
@@ -38,21 +52,6 @@ export default function LibraryPage() {
         if (!matchesQuery) return false;
       }
 
-      // Genre filter (from search or sidebar)
-      const activeGenre = filters.genre !== "All Genres" ? filters.genre : selectedGenre;
-      if (activeGenre !== "All Genres" && book.genre !== activeGenre) {
-        return false;
-      }
-
-      // Year filter
-      if (filters.year !== "All Years") {
-        if (filters.year === "Before 2018") {
-          if (book.year >= 2018) return false;
-        } else {
-          if (book.year !== parseInt(filters.year)) return false;
-        }
-      }
-
       // Author filter
       if (filters.author) {
         if (!book.author.toLowerCase().includes(filters.author.toLowerCase())) {
@@ -64,35 +63,44 @@ export default function LibraryPage() {
     });
   }, [searchQuery, filters, selectedGenre]);
 
-  const handleSearch = (query: string, searchFilters: SearchFilters) => {
-    setSearchQuery(query);
-    setFilters(searchFilters);
-    // Sync sidebar genre with search filter
-    if (searchFilters.genre !== "All Genres") {
-      setSelectedGenre(searchFilters.genre);
-    }
+  // В начале компонента добавьте состояние
+  const [currentPage, setCurrentPage] = useState(1);
+  const BOOKS_PER_PAGE = 1; // или другое число
+
+  // После filteredBooks добавьте вычисление пагинации
+  const totalPages = Math.ceil(filteredBooks.length / BOOKS_PER_PAGE);
+  const paginatedBooks = useMemo(() => {
+    const startIndex = (currentPage - 1) * BOOKS_PER_PAGE;
+    return filteredBooks.slice(startIndex, startIndex + BOOKS_PER_PAGE);
+  }, [filteredBooks, currentPage]);
+
+  // Сбрасывайте страницу при изменении фильтров
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery, filters, selectedGenre]);
+
+  const handleSearch = () => {
+    console.log("Шукаємо:", searchQuery, "З фільтрами:", filters);
+    // Тут логіка виклику API або фільтрації масиву
   };
 
-  const handleGenreSelect = (genre: string) => {
-    setSelectedGenre(genre);
-    setFilters((prev) => ({ ...prev, genre }));
+  // Функція для скидання
+  const handleClearFilters = () => {
+    setFilters({
+      genre: [],
+      yearRange: [1900, 2026],
+      author: "",
+      language: [],
+      availability: "all",
+      rating: 0,
+      publisher: "Всі видавництва",
+      format: [],
+      sortBy: "relevance",
+    });
   };
 
   const handleKeywordClick = (keyword: string) => {
     setSearchQuery(keyword);
-  };
-
-  const handleCategoryClick = (category: string) => {
-    // Check if the category matches a known genre
-    const matchingGenre = genres.find(
-      (g) => g.toLowerCase() === category.toLowerCase()
-    );
-    if (matchingGenre) {
-      handleGenreSelect(matchingGenre);
-    } else {
-      // Otherwise use it as a search query
-      setSearchQuery(category);
-    }
   };
 
   const handleMonthSelect = (month: number, year: number) => {
@@ -103,8 +111,8 @@ export default function LibraryPage() {
   };
 
   const FULL_MONTHS = [
-    "January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December"
+    "Січень", "Лютий", "Березень", "Квітень", "Травень", "Червень",
+    "Липень", "Серпень", "Вересень", "Жовтень", "Листопад", "Грудень"
   ];
 
   return (
@@ -116,10 +124,12 @@ export default function LibraryPage() {
         <div className="flex flex-col gap-8 lg:flex-row">
           {/* Sidebar */}
           <div className="w-full shrink-0 lg:w-72">
-            <Sidebar
-              selectedGenre={selectedGenre}
-              onGenreSelect={handleGenreSelect}
-              onMonthSelect={handleMonthSelect}
+            <Sidebar 
+              filters={filters}
+              setFilters={setFilters}
+              onApplyFilters={handleSearch}
+              clearFilters={handleClearFilters}
+              onMonthSelect={(m, y) => console.log(m, y)}
             />
           </div>
 
@@ -129,54 +139,23 @@ export default function LibraryPage() {
             <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
               <div>
                 <h2 className="font-serif text-2xl font-bold text-foreground">
-                  {selectedGenre === "All Genres" ? "All Books" : selectedGenre}
+                  {selectedGenre === "Усі жанри" ? "Усі книги" : selectedGenre}
                 </h2>
                 <p className="mt-1 text-sm text-muted-foreground">
-                  Showing {filteredBooks.length} {filteredBooks.length === 1 ? "book" : "books"}
-                  {searchQuery && ` for "${searchQuery}"`}
-                  {selectedArrivalMonth && ` from ${FULL_MONTHS[selectedArrivalMonth.month]} ${selectedArrivalMonth.year}`}
+                  Знайдено {filteredBooks.length} {filteredBooks.length === 1 ? "книга" : "книг"}
+                  {searchQuery && ` по "${searchQuery}"`}
+                  {selectedArrivalMonth && ` з ${FULL_MONTHS[selectedArrivalMonth.month]} ${selectedArrivalMonth.year}`}
                 </p>
               </div>
 
               <div className="flex items-center gap-4">
-                {/* View Toggle */}
-                <div className="flex items-center gap-2 rounded-lg border border-border bg-card p-1">
-                  <button
-                    type="button"
-                    onClick={() => setViewMode("grid")}
-                    className={`flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
-                      viewMode === "grid"
-                        ? "bg-primary text-primary-foreground"
-                        : "text-muted-foreground hover:text-foreground"
-                    }`}
-                  >
-                    <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
-                    </svg>
-                    Grid
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setViewMode("list")}
-                    className={`flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
-                      viewMode === "list"
-                        ? "bg-primary text-primary-foreground"
-                        : "text-muted-foreground hover:text-foreground"
-                    }`}
-                  >
-                    <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                    </svg>
-                    List
-                  </button>
-                </div>
 
                 {/* Sort Options */}
                 <select className="rounded-lg border border-border bg-card px-4 py-2 text-sm text-card-foreground focus:outline-none focus:ring-2 focus:ring-ring">
-                  <option>Most Popular</option>
-                  <option>Newest First</option>
-                  <option>Highest Rated</option>
-                  <option>A-Z</option>
+                  <option>За популярністю</option>
+                  <option>За новизною</option>
+                  <option>За рейтингом</option>
+                  <option>А-Я</option>
                 </select>
               </div>
             </div>
@@ -187,8 +166,68 @@ export default function LibraryPage() {
               viewMode={viewMode}
               onQuickPreview={setPreviewBook}
               onKeywordClick={handleKeywordClick}
-              onCategoryClick={handleCategoryClick}
+              onCategoryClick={handleKeywordClick}
             />
+
+            {/* Замените <Pagination /> на: */}
+            {totalPages > 1 && (
+              <Pagination className="mt-8">
+                <PaginationContent>
+                  <PaginationItem>
+                    <PaginationPrevious
+                      href="#"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setCurrentPage((prev) => Math.max(1, prev - 1));
+                      }}
+                      className={currentPage === 1 ? 'pointer-events-none opacity-50' : ''}
+                    />
+                  </PaginationItem>
+
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => {
+                    // Показываем первую, последнюю, текущую и соседние страницы
+                    if (
+                      page === 1 ||
+                      page === totalPages ||
+                      (page >= currentPage - 1 && page <= currentPage + 1)
+                    ) {
+                      return (
+                        <PaginationItem key={page}>
+                          <PaginationLink
+                            href="#"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              setCurrentPage(page);
+                            }}
+                            isActive={currentPage === page}
+                          >
+                            {page}
+                          </PaginationLink>
+                        </PaginationItem>
+                      );
+                    } else if (page === currentPage - 2 || page === currentPage + 2) {
+                      return (
+                        <PaginationItem key={page}>
+                          <PaginationEllipsis />
+                        </PaginationItem>
+                      );
+                    }
+                    return null;
+                  })}
+
+                  <PaginationItem>
+                    <PaginationNext
+                      href="#"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setCurrentPage((prev) => Math.min(totalPages, prev + 1));
+                      }}
+                      className={currentPage === totalPages ? 'pointer-events-none opacity-50' : ''}
+                    />
+                  </PaginationItem>
+                </PaginationContent>
+              </Pagination>
+            )}
           </div>
         </div>
       </main>
@@ -217,21 +256,18 @@ export default function LibraryPage() {
                 </svg>
               </div>
               <span className="font-serif text-lg font-semibold text-foreground">
-                Biblioteca
+                Бібліотека ім. Т. Г. Шевченка
               </span>
             </div>
             <p className="text-sm text-muted-foreground">
-              © 2026 Biblioteca Digital Library. All rights reserved.
+              © 2026 Бібліотека ім. Т. Г. Шевченка. Всі права захищені.
             </p>
             <div className="flex gap-6">
               <a href="#" className="text-sm text-muted-foreground hover:text-foreground">
-                Privacy
+                Політика конфіденційності
               </a>
               <a href="#" className="text-sm text-muted-foreground hover:text-foreground">
-                Terms
-              </a>
-              <a href="#" className="text-sm text-muted-foreground hover:text-foreground">
-                Help
+                Підтримка
               </a>
             </div>
           </div>

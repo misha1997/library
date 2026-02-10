@@ -152,6 +152,68 @@ export const genres = [
   "Literary Fiction",
 ];
 
+export const languages = [
+  { value: "uk", label: "Українська" },
+  { value: "en", label: "Англійська" },
+  { value: "ru", label: "Російська" },
+  { value: "fr", label: "Французька" },
+  { value: "de", label: "Німецька" },
+  { value: "pl", label: "Польська" },
+];
+
+// Формати книг
+export const formats = [
+  { value: "hardcover", label: "Тверда обкладинка" },
+  { value: "paperback", label: "М'яка обкладинка" },
+  { value: "ebook", label: "Електронна книга" },
+  { value: "audiobook", label: "Аудіокнига" },
+];
+
+export const allAuthors = [
+  "Тарас Шевченко",
+  "Валер'ян Підмогильний",
+  "Іван Багряний",
+  "Ліна Костенко",
+  "Василь Стус",
+  "Сергій Жадан",
+  "Оксана Забужко",
+  "Григорій Сковорода"
+];
+
+export const allKeywords = [
+  "Класика",
+  "Модернізм",
+  "Психологія",
+  "Драма",
+  "Історія України",
+  "Поезія",
+  "Філософія",
+  "Київ",
+  "Дитяча література"
+];
+
+// Список видавництв
+export const publishers = [
+  "Всі видавництва",
+  "Фабула",
+  "Наш Формат",
+  "Віват",
+  "КСД",
+  "А-ба-ба-га-ла-ма-га",
+  "Vivat",
+];
+
+// Опції сортування
+export const sortOptions = [
+  { value: "relevance", label: "За релевантністю" },
+  { value: "title", label: "За назвою (А-Я)" },
+  { value: "author", label: "За автором (А-Я)" },
+  { value: "year-desc", label: "За роком (новіші)" },
+  { value: "year-asc", label: "За роком (старіші)" },
+  { value: "rating", label: "За рейтингом" },
+  { value: "popular", label: "За популярністю" },
+];
+
 export const trendingBooks = books.slice(0, 4);
 
 export const currentlyReading = [

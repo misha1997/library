@@ -35,7 +35,7 @@ export function BookRow({ book, onQuickPreview, onKeywordClick, onCategoryClick 
                   : "bg-amber-500/90 text-white"
                 }`}
             >
-              {book.available ? "Available" : "Reserved"}
+              {book.available ? "В наявності" : "Очікуєтья"}
             </Badge>
           </div>
         </div>
@@ -50,7 +50,7 @@ export function BookRow({ book, onQuickPreview, onKeywordClick, onCategoryClick 
               {book.title}
             </h3>
           </Link>
-          <p className="mt-0.5 text-sm text-muted-foreground">by {book.author}</p>
+          <p className="mt-0.5 text-sm text-muted-foreground">{book.author}</p>
 
           {/* Rating & Meta */}
           <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted-foreground">
@@ -65,7 +65,7 @@ export function BookRow({ book, onQuickPreview, onKeywordClick, onCategoryClick 
             </div>
             <div className="flex items-center gap-1">
               <FileText className="h-3.5 w-3.5" />
-              <span>{book.pages} pages</span>
+              <span>{book.pages} сторінок</span>
             </div>
           </div>
 
@@ -76,7 +76,7 @@ export function BookRow({ book, onQuickPreview, onKeywordClick, onCategoryClick 
 
           {/* Categories */}
           <div className="mt-3 flex flex-wrap items-center gap-1.5">
-            <span className="text-xs font-medium text-muted-foreground">Categories:</span>
+            <span className="text-xs font-medium text-muted-foreground">Категорії:</span>
             {book.categories.map((category) => (
               <button
                 key={category}
@@ -91,7 +91,7 @@ export function BookRow({ book, onQuickPreview, onKeywordClick, onCategoryClick 
 
           {/* Keywords */}
           <div className="mt-2 flex flex-wrap items-center gap-1.5">
-            <span className="text-xs font-medium text-muted-foreground">Keywords:</span>
+            <span className="text-xs font-medium text-muted-foreground">Ключові слова:</span>
             {book.keywords.map((keyword) => (
               <button
                 key={keyword}
@@ -124,15 +124,15 @@ export function BookRow({ book, onQuickPreview, onKeywordClick, onCategoryClick 
             className="gap-1.5 text-xs"
           >
             <Eye className="h-3.5 w-3.5" />
-            Preview
+            Детальніше
           </Button>
           <Button size="sm" variant="outline" className="gap-1.5 text-xs bg-transparent">
             <Clock className="h-3.5 w-3.5" />
-            Reserve
+            Замовити
           </Button>
           <Button size="sm" variant="outline" className="gap-1.5 text-xs bg-transparent">
             <Printer className="h-3.5 w-3.5" />
-            Print
+            Друк
           </Button>
         </div>
       </div>

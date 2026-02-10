@@ -74,7 +74,7 @@ export function BookPreviewModal({ book, onClose }: BookPreviewModalProps) {
                 </span>
                 <span className="flex items-center gap-1">
                   <BookOpen className="h-4 w-4" />
-                  {book.pages} pages
+                  {book.pages} сторінок
                 </span>
               </div>
             </div>
@@ -82,7 +82,7 @@ export function BookPreviewModal({ book, onClose }: BookPreviewModalProps) {
             {/* Description */}
             <div className="mt-6 flex-1">
               <h3 className="mb-2 text-sm font-semibold uppercase tracking-wider text-muted-foreground">
-                Synopsis
+                Аннотація
               </h3>
               <p className="leading-relaxed text-card-foreground">
                 {book.description}
@@ -95,7 +95,7 @@ export function BookPreviewModal({ book, onClose }: BookPreviewModalProps) {
                 <div className="flex items-center gap-2">
                   <div className={`h-3 w-3 rounded-full ${book.available ? "bg-green-500" : "bg-amber-500"}`} />
                   <span className="text-sm font-medium text-card-foreground">
-                    {book.available ? "Available for borrowing" : "Currently reserved"}
+                    {book.available ? "Доступна для замовлення" : "Очікується"}
                   </span>
                 </div>
                 {!book.available && (
@@ -111,7 +111,7 @@ export function BookPreviewModal({ book, onClose }: BookPreviewModalProps) {
               {book.available ? (
                 <>
                   <Button className="flex-1 bg-primary text-primary-foreground hover:bg-primary/90">
-                    Reserve Now
+                    Замовити
                   </Button>
                   {/* <Button
                     variant="outline"

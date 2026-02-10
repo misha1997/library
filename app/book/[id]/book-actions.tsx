@@ -18,14 +18,6 @@ export function BookActions() {
       >
         <Heart className={`h-5 w-5 ${isWishlisted ? "fill-current" : ""}`} />
       </Button>
-      <Button
-        variant="ghost"
-        size="icon"
-        onClick={() => setIsBookmarked(!isBookmarked)}
-        className={isBookmarked ? "text-secondary" : "text-muted-foreground"}
-      >
-        <Bookmark className={`h-5 w-5 ${isBookmarked ? "fill-current" : ""}`} />
-      </Button>
       <Button variant="ghost" size="icon" className="text-muted-foreground">
         <Share2 className="h-5 w-5" />
       </Button>

@@ -130,23 +130,23 @@ export function BookComments({ bookId }: { bookId: string }) {
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
           <h2 className="font-serif text-2xl font-semibold text-foreground">
-            Reviews & Comments
+            Відгуки
           </h2>
           <p className="mt-1 text-sm text-muted-foreground">
-            {comments.length} reviews with an average rating of {averageRating}
+            {comments.length} відгуки із середньою оцінкою {averageRating}
           </p>
         </div>
 
         {/* Sort Options */}
         <div className="flex items-center gap-2">
-          <span className="text-sm text-muted-foreground">Sort by:</span>
+          <span className="text-sm text-muted-foreground">Сортувати за:</span>
           <select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value as "recent" | "helpful")}
             className="rounded-lg border border-border bg-card px-3 py-1.5 text-sm text-card-foreground focus:outline-none focus:ring-2 focus:ring-ring"
           >
-            <option value="helpful">Most Helpful</option>
-            <option value="recent">Most Recent</option>
+            <option value="helpful">Оцінкою</option>
+            <option value="recent">Найновіші</option>
           </select>
         </div>
       </div>
@@ -156,11 +156,11 @@ export function BookComments({ bookId }: { bookId: string }) {
         onSubmit={handleSubmit}
         className="mt-6 rounded-xl border border-border/50 bg-card/60 p-6 backdrop-blur-sm"
       >
-        <h3 className="font-medium text-card-foreground">Write a Review</h3>
+        <h3 className="font-medium text-card-foreground">Написати відгук</h3>
 
         {/* Rating Input */}
         <div className="mt-4">
-          <label className="text-sm text-muted-foreground">Your Rating</label>
+          <label className="text-sm text-muted-foreground">Ваш рейтинг</label>
           <div className="mt-2 flex items-center gap-1">
             {[1, 2, 3, 4, 5].map((star) => (
               <button
@@ -181,7 +181,7 @@ export function BookComments({ bookId }: { bookId: string }) {
               </button>
             ))}
             <span className="ml-2 text-sm text-muted-foreground">
-              {newRating} out of 5
+              {newRating} з 5
             </span>
           </div>
         </div>
@@ -189,13 +189,13 @@ export function BookComments({ bookId }: { bookId: string }) {
         {/* Comment Input */}
         <div className="mt-4">
           <label htmlFor="comment" className="text-sm text-muted-foreground">
-            Your Review
+            Ваш відгук
           </label>
           <textarea
             id="comment"
             value={newComment}
             onChange={(e) => setNewComment(e.target.value)}
-            placeholder="Share your thoughts about this book..."
+            placeholder="Поділіться своїми думками про цю книгу..."
             rows={4}
             className="mt-2 w-full resize-none rounded-lg border border-border bg-background px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-ring"
           />
@@ -203,14 +203,14 @@ export function BookComments({ bookId }: { bookId: string }) {
 
         <div className="mt-4 flex items-center justify-between">
           <p className="text-xs text-muted-foreground">
-            Your review will be visible to other readers
+            Ваш відгук буде видимим для інших читачів
           </p>
           <Button
             type="submit"
             disabled={!newComment.trim()}
             className="bg-primary text-primary-foreground hover:bg-primary/90"
           >
-            Submit Review
+            Надіслати відгук
           </Button>
         </div>
       </form>
@@ -263,51 +263,11 @@ export function BookComments({ bookId }: { bookId: string }) {
                   </div>
                 </div>
               </div>
-
-              <button
-                type="button"
-                className="rounded-lg p-2 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-              >
-                <MoreHorizontal className="h-4 w-4" />
-              </button>
             </div>
 
             <p className="mt-4 leading-relaxed text-muted-foreground">
               {comment.content}
             </p>
-
-            <div className="mt-4 flex items-center gap-4">
-              <button
-                type="button"
-                onClick={() => handleLike(comment.id)}
-                className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm transition-colors ${
-                  comment.liked
-                    ? "bg-secondary/20 text-secondary"
-                    : "text-muted-foreground hover:bg-muted hover:text-foreground"
-                }`}
-              >
-                <ThumbsUp
-                  className={`h-4 w-4 ${comment.liked ? "fill-current" : ""}`}
-                />
-                <span>Helpful ({comment.likes})</span>
-              </button>
-
-              <button
-                type="button"
-                className="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-              >
-                <MessageCircle className="h-4 w-4" />
-                <span>Reply ({comment.replies})</span>
-              </button>
-
-              <button
-                type="button"
-                className="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-              >
-                <Flag className="h-4 w-4" />
-                <span>Report</span>
-              </button>
-            </div>
           </div>
         ))}
       </div>
